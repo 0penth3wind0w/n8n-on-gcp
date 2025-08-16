@@ -1,0 +1,6 @@
+name: n8n-on-gcp
+runtime: nodejs
+description: A Pulumi project to deploy n8n on GCP
+
+backend:
+  url: gs://PULUMI_STACK_BUCKET
