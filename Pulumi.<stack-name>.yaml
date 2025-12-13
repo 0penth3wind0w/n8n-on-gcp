@@ -1,12 +1,10 @@
 config:
   gcp:project: GCP_PROJECT_NAME
   gcp:region: GCP_REGION
-  dataBucket: DATA_BICKET
+  dataBucket: DATA_BUCKET
   machineType: MACHINE_TYPE
   n8nHost: localhost
   n8nPort: 5678
-  n8nBasicAuthUser: N8N_BASIC_AUTH_USER # N8N_BASIC_AUTH_USER
-  n8nBasicAuthPassword: N8N_BASIC_AUTH_PASSWORD # N8N_BASIC_AUTH_PASSWORD
   tailscaleAuthKey: TAILSCALE_AUTH_KEY
   zone: RESOURCE_ZONE
 encryptionsalt: ENCRYPTION_SALT

@@ -9,8 +9,6 @@ interface N8nResourceArgs {
     machineType: string;
     n8nHost: string;
     n8nPort: string;
-    n8nBasicAuthUser: string;
-    n8nBasicAuthPassword: string;
     tailscaleAuthKey: string;
     zone: string;
 }
@@ -25,8 +23,6 @@ export class N8nResource extends pulumi.ComponentResource {
             { name: 'machineType', value: args.machineType },
             { name: 'n8nHost', value: args.n8nHost },
             { name: 'n8nPort', value: args.n8nPort },
-            { name: 'n8nBasicAuthUser', value: args.n8nBasicAuthUser },
-            { name: 'n8nBasicAuthPassword', value: args.n8nBasicAuthPassword },
             { name: 'tailscaleAuthKey', value: args.tailscaleAuthKey },
             { name: 'zone', value: args.zone }
         ];
@@ -45,8 +41,6 @@ export class N8nResource extends pulumi.ComponentResource {
         const dockerComposeContent = dockerComposeTemplate
             .replace(/{N8N_HOST}/g, args.n8nHost)
             .replace(/{N8N_PORT}/g, args.n8nPort)
-            .replace(/{N8N_BASIC_AUTH_USER}/g, `"${args.n8nBasicAuthUser}"`)
-            .replace(/{N8N_BASIC_AUTH_PASSWORD}/g, `"${args.n8nBasicAuthPassword}"`);
         const dockerComposeFile = new gcp.storage.BucketObject("docker-compose.yml", {
             name: "docker-compose.yml",
             content: dockerComposeContent,

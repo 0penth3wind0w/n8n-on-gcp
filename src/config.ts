@@ -8,8 +8,6 @@ export type ProjectConfig = {
     machineType: string;
     n8nHost: string;
     n8nPort: string;
-    n8nBasicAuthUser: string;
-    n8nBasicAuthPassword: string;
     tailscaleAuthKey: string;
     zone: string;
 }
@@ -23,8 +21,6 @@ export const projectConfig: ProjectConfig = {
     machineType: config.get("machineType") || "",
     n8nHost: config.get("n8nHost") || "",
     n8nPort: config.get("n8nPort") || "",
-    n8nBasicAuthUser: config.get("n8nBasicAuthUser") || "",
-    n8nBasicAuthPassword: config.get("n8nBasicAuthPassword") || "",
     tailscaleAuthKey: config.get("tailscaleAuthKey") || "",
     zone: config.get("zone") || ""
 };

@@ -11,8 +11,6 @@ const n8n = new N8nResource("n8n", {
     machineType: "e2-micro",
     n8nHost: projectConfig.n8nHost,
     n8nPort: projectConfig.n8nPort,
-    n8nBasicAuthUser: projectConfig.n8nBasicAuthUser,
-    n8nBasicAuthPassword: projectConfig.n8nBasicAuthPassword,
     tailscaleAuthKey: projectConfig.tailscaleAuthKey,
     zone: "us-central1-a",
 });
