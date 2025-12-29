@@ -4,6 +4,7 @@ set -euo pipefail
 # Read env-specific values from instance metadata
 GCS_BUCKET="$(curl -s -H "Metadata-Flavor: Google" http://metadata.google.internal/computeMetadata/v1/instance/attributes/GCS_BUCKET)"
 TAILSCALE_AUTH_KEY="$(curl -s -H "Metadata-Flavor: Google" http://metadata.google.internal/computeMetadata/v1/instance/attributes/TAILSCALE_AUTH_KEY)"
+N8N_ENABLED="$(curl -s -H "Metadata-Flavor: Google" http://metadata.google.internal/computeMetadata/v1/instance/attributes/N8N_ENABLED)"
 
 apt-get update
 apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release
@@ -31,15 +32,21 @@ systemctl enable docker
 # Tailscale
 curl -fsSL https://tailscale.com/install.sh | sh
 
+echo 'net.ipv4.ip_forward = 1' | tee -a /etc/sysctl.d/99-tailscale.conf
+echo 'net.ipv6.conf.all.forwarding = 1' | tee -a /etc/sysctl.d/99-tailscale.conf
+sysctl -p /etc/sysctl.d/99-tailscale.conf
+tailscale up --auth-key=${TAILSCALE_AUTH_KEY} --advertise-exit-node --accept-routes --hostname=gcp-$(hostname)
+
 # n8n setup
-mkdir -p /opt/n8n
-mkdir -p /opt/n8n/n8n_data
-chmod 755 /opt/n8n/n8n_data
-chown 1000:1000 /opt/n8n/n8n_data
-gsutil cp ${GCS_BUCKET}/docker-compose.yml /opt/n8n/docker-compose.yml
-docker pull docker.n8n.io/n8nio/n8n
-
-tailscale up --auth-key=${TAILSCALE_AUTH_KEY} --hostname=n8n-$(hostname)
-
-cd /opt/n8n
-docker-compose up -d
+if [ "${N8N_ENABLED}" == "true" ]; then
+    ORIGINAL_DIR=$(pwd)
+    mkdir -p /opt/n8n
+    mkdir -p /opt/n8n/n8n_data
+    chmod 755 /opt/n8n/n8n_data
+    chown 1000:1000 /opt/n8n/n8n_data
+    gsutil cp ${GCS_BUCKET}/docker-compose.yml /opt/n8n/docker-compose.yml
+    docker pull docker.n8n.io/n8nio/n8n
+    cd /opt/n8n
+    docker-compose up -d
+    cd "${ORIGINAL_DIR}"
+fi

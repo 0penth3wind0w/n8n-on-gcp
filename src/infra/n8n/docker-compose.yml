@@ -4,10 +4,11 @@ services:
     container_name: n8n
     restart: always
     environment:
-      - N8N_PROTOCOL=http
       - N8N_HOST={N8N_HOST}
       - N8N_PORT={N8N_PORT}
+      - N8N_PROTOCOL=http
       - N8N_SECURE_COOKIE=false
+      - N8N_SKIP_AUTH_ON_OAUTH_CALLBACK=true
     ports:
       - "{N8N_PORT}:{N8N_PORT}"
     volumes:

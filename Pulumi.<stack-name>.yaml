@@ -1,10 +1,16 @@
 config:
+  # GCP
   gcp:project: GCP_PROJECT_NAME
   gcp:region: GCP_REGION
-  dataBucket: DATA_BUCKET
-  machineType: MACHINE_TYPE
-  n8nHost: localhost
-  n8nPort: 5678
-  tailscaleAuthKey: TAILSCALE_AUTH_KEY
   zone: RESOURCE_ZONE
+  # Data Bucket
+  dataBucket: DATA_BUCKET
+  # Compute Config
+  machineType: MACHINE_TYPE
+  tailscaleAuthKey: TAILSCALE_AUTH_KEY
+  # Services
+  n8n:
+    enable: true # set to true to enable n8n service
+    host: localhost
+    port: 5678
 encryptionsalt: ENCRYPTION_SALT

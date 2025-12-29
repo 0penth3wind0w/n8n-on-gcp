@@ -1,20 +1,15 @@
-import { projectConfig } from "./src/config"
+import { projectConfig, n8nConfig } from "./src/config"
 import { gcpProvider } from "./src/provider"
-import { N8nResource } from "./src/infra/n8n"
+import { WorkspaceResource } from "./src/infra"
 
-const project = projectConfig;
-console.log(project)
-
-const n8n = new N8nResource("n8n", {
+const workspace = new WorkspaceResource("workspace", {
     provider: gcpProvider,
+    zone: "us-central1-a",
     dataBucket: projectConfig.dataBucket,
     machineType: "e2-micro",
-    n8nHost: projectConfig.n8nHost,
-    n8nPort: projectConfig.n8nPort,
     tailscaleAuthKey: projectConfig.tailscaleAuthKey,
-    zone: "us-central1-a",
+    n8n: n8nConfig,
 });
 
-export const n8nResource = n8n;
+export const workspaceResource = workspace;
 // console.log(`Using project: ${projectId}, region: ${region}, machine type: ${machineType}, data bucket: ${dataBucket}`);
-

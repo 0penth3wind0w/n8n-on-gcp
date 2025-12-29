@@ -7,14 +7,11 @@ Deploys an n8n instance on Google Cloud Platform (GCP) using Pulumi.
 - **Pulumi CLI:** [Install Pulumi](https://www.pulumi.com/docs/get-started/install/)
 - **GCP Account:** A Google Cloud Platform account with a configured project.
 - **gcloud CLI:** [Install and authenticate gcloud CLI](https://cloud.google.com/sdk/docs/install)
+- **Google Cloud Project** Create Project on GCP
 - **Google Cloud Storage (GCS) Bucket:** Create a GCS bucket for Pulumi state storage before deployment.
+- **Enable API:** Enable the following API on GCP to deploy the infra
+    - Compute Engine API
 - **Tailscale Account:** Tailscale account for accessing n8n web console
-
-## Project Structure
-
-- `src/infra`: IaC using Pulumi.
-- `Pulumi.yaml`: Pulumi project metadata and backend configuration.
-- `Pulumi.<stack-name>.yaml`: Stack-specific configuration (e.g., GCP project ID, region, machine type).
 
 ## Configuration
 
@@ -47,16 +44,13 @@ Deploys an n8n instance on Google Cloud Platform (GCP) using Pulumi.
 
     Use `pulumi stack init <stackName>` to create one
 
-    Update the stack configuration file (e.g., `Pulumi.dev.yaml`) with correct GCP project configuration
-
-5. **Review `src/infra/n8n/docker-compose.yml`:**
-    Ensure these files are configured as desired.
+    Update the stack configuration file with correct GCP project configuration (refer to `Pulumi.<stackName>.yaml` for required configuration)
 
 ## Deployment
 
 1. **Select your stack:**
     ```bash
-    pulumi stack select <stack-name> --create # Use --create if stack doesn't exist
+    pulumi stack select <stack-name>
     ```
 
 2. **Deploy the infrastructure:**
@@ -65,7 +59,9 @@ Deploys an n8n instance on Google Cloud Platform (GCP) using Pulumi.
     ```
     Review the preview and confirm by selecting `yes`.
 
-3. **Access n8n:**
+## Services
+
+1. **n8n:**
     After deployment, the public IP will be displayed. Access n8n at `http://<tailscale-ip>:5678`.
 
 ## Cleanup
@@ -77,10 +73,18 @@ pulumi destroy
 ```
 Review and confirm by selecting `yes`.
 
+## Note
+
+The instance will advertise itself as tailscale exit node.
+You have to approve the exit node in the Tailscale Admin Console to use this function.
+
+- Go to Machines → select the instance → Options → Edit route settings → enable "Use as exit node".
+
+
 ## Troubleshooting
 
 1.  **View the log file on instance:**
     The startup script logs to `/var/log/startup-script.log` on the GCE instance. If n8n isn't running, inspect this log:
     ```bash
-    cat /var/log/startup-script.log
+    cat /var/log/syslog.log | grep startup
     ```
